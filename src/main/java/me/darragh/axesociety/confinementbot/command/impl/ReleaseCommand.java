@@ -27,11 +27,11 @@ public class ReleaseCommand extends Command {
             () -> "This command can only be used in %s.".formatted(BotConfig.GUILD_NAME)
     );
 
-    private static final String SUCCESS_MESSAGE = "%s has been forcefully taken out of gambling. 😡";
+    private static final String SUCCESS_MESSAGE = "%s has been released from confinement.";
     private static final String ERROR_MESSAGE = "An error occurred while trying to release the user.";
 
     public ReleaseCommand() {
-        super("release", "Releases a user from blissful gambling confinement.");
+        super("release", "Releases a user from confinement.");
     }
 
     @Override

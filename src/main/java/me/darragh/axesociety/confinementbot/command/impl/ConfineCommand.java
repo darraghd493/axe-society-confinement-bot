@@ -27,11 +27,11 @@ public class ConfineCommand extends Command {
             () -> "This command can only be used in %s.".formatted(BotConfig.GUILD_NAME)
     );
 
-    private static final String SUCCESS_MESSAGE = "%s has been confined to gambling! 🤑🫰⚠️";
-    private static final String FAILURE_MESSAGE = "An error occurred while trying to confine the user to gambling.";
+    private static final String SUCCESS_MESSAGE = "%s has been confined.";
+    private static final String FAILURE_MESSAGE = "An error occurred while trying to confine this user.";
 
     public ConfineCommand() {
-        super("confine", "Confines a user to gambling.");
+        super("confine", "Confines a user.");
     }
 
     @Override
