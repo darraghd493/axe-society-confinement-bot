@@ -1,0 +1,1 @@
+rootProject.name = "axe-society-confinement-bot"
