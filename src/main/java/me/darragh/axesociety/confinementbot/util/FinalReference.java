@@ -1,7 +1,5 @@
 package me.darragh.axesociety.confinementbot.util;
 
-import lombok.Getter;
-
 import java.util.concurrent.atomic.AtomicReference;
 
 /**

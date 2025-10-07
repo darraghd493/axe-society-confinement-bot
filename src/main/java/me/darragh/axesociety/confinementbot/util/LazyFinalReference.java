@@ -10,6 +10,8 @@ import java.util.function.Supplier;
  * This delays the initialisation of an object until it is first accessed.
  *
  * @param <T> The type of the object being referenced.
+ * @author darraghd493
+ * @since 1.0.0
  */
 @RequiredArgsConstructor
 public class LazyFinalReference<T> {
