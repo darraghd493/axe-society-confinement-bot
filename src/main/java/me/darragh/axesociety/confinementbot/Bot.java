@@ -6,6 +6,7 @@ import me.darragh.axesociety.confinementbot.listener.CommandListener;
 import me.darragh.axesociety.confinementbot.listener.JoinListener;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 
 /**
@@ -43,6 +44,9 @@ public class Bot {
                 success -> log.info("Slash commands have been updated."),
                 error -> log.error("Failed to update slash commands.", error)
         );
+
+        // Update presence
+        this.jdaApi.getPresence().setActivity(Activity.watching("over %s".formatted(BotConfig.GUILD_NAME)));
     }
 
     /**
