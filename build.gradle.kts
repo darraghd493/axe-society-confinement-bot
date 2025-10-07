@@ -49,16 +49,16 @@ tasks.compileJava {
 tasks.jar {
     archiveClassifier.set("")
     from(sourceSets.main.get().output)
-    manifest {
-        attributes["Main-Class"] = "me.darragh.axesociety.confinementbot.Main"
-        attributes["Implementation-Title"] = project.name
-    }
 }
 
 tasks.named<ShadowJar>("shadowJar") {
     archiveClassifier.set("all")
     from(sourceSets.main.get().output)
-    minimize()
+    manifest {
+        attributes( // looks a bit nicer
+            "Main-Class" to "me.darragh.axesociety.confinementbot.Main"
+        )
+    }
 }
 
 tasks.build {
