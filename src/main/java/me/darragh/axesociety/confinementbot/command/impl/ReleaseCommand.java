@@ -3,10 +3,7 @@ package me.darragh.axesociety.confinementbot.command.impl;
 import lombok.extern.slf4j.Slf4j;
 import me.darragh.axesociety.confinementbot.BotConfig;
 import me.darragh.axesociety.confinementbot.command.Command;
-import me.darragh.axesociety.confinementbot.util.ArrayUtil;
-import me.darragh.axesociety.confinementbot.util.LazyFinalReference;
-import me.darragh.axesociety.confinementbot.util.MemberUtil;
-import me.darragh.axesociety.confinementbot.util.OptionUtil;
+import me.darragh.axesociety.confinementbot.util.*;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
@@ -38,7 +35,7 @@ public class ReleaseCommand extends Command {
     }
 
     @Override
-    public void handleInteraction(SlashCommandInteractionEvent event) {
+    public void handleInteraction(SlashCommandInteractionEvent event) { // TODO: Reduce code duplication
         Guild guild = event.getGuild();
         Member member = event.getMember();
 
@@ -84,7 +81,10 @@ public class ReleaseCommand extends Command {
 
         // Remove the confined role from the member
         guild.removeRoleFromMember(targetMember, confinedRole).queue(
-                success -> event.reply(SUCCESS_MESSAGE.formatted(user.getAsMention())).queue(),
+                success -> {
+                    event.reply(SUCCESS_MESSAGE.formatted(user.getAsMention())).queue();
+                    LogUtil.enqueueLogMessage("User %s (ID: %s) has been released from confinement in guild %s by %s (ID: %s).".formatted(user.getAsTag(), user.getId(), guild.getId(), event.getUser().getAsTag(), event.getUser().getId()), guild);
+                },
                 error -> {
                     event.reply(ERROR_MESSAGE).setEphemeral(true).queue();
                     log.error("Failed to confine user {} (ID: {}) in guild {}.", user.getAsTag(), user.getId(), guild.getId(), error);
