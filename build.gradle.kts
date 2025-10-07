@@ -43,12 +43,21 @@ dependencies {
 // Task:
 tasks.compileJava {
     options.encoding = "UTF-8"
+    options.release.set(21)
+}
+
+tasks.jar {
+    archiveClassifier.set("")
+    from(sourceSets.main.get().output)
+    manifest {
+        attributes["Main-Class"] = "me.darragh.axesociety.confinementbot.Main"
+        attributes["Implementation-Title"] = project.name
+    }
 }
 
 tasks.named<ShadowJar>("shadowJar") {
     archiveClassifier.set("all")
     from(sourceSets.main.get().output)
-
     minimize()
 }
 
