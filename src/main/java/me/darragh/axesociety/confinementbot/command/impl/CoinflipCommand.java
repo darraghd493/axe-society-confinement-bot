@@ -1,5 +1,7 @@
 package me.darragh.axesociety.confinementbot.command.impl;
 
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.longs.LongArrayList;
 import lombok.extern.slf4j.Slf4j;
 import me.darragh.axesociety.confinementbot.BotConfig;
 import me.darragh.axesociety.confinementbot.command.Command;
@@ -13,6 +15,9 @@ import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
+
+import java.util.List;
+import java.util.Map;
 
 import static me.darragh.axesociety.confinementbot.BotMessages.*;
 
@@ -31,6 +36,8 @@ public class CoinflipCommand extends Command {
     private static final String SUCCESS_MESSAGE = "🪙 The coin landed on %s. You guessed correct - you are FREE! 🥳🎉";
     private static final String FAILURE_MESSAGE = "🪙 The coin landed on %s. You guessed wrong, you remain confined. 😂🫵";
     private static final String ERROR_MESSAGE = "An error occurred while trying to release you."; // you - for regular members
+
+    private static final Map<Long, List<Long>> COOLDOWN_MAP = new Long2ObjectOpenHashMap<>();
 
     public CoinflipCommand() {
         super("coinflip", "Gambles your confinement.");
@@ -66,6 +73,17 @@ public class CoinflipCommand extends Command {
             event.reply(RELEASE_NOT_CONFINED_MESSAGE).setEphemeral(true).queue();
             return;
         }
+
+        // Check if the member has used the command 3x in the last 24 hours
+        List<Long> usageTimestamps = COOLDOWN_MAP.getOrDefault(member.getIdLong(), new LongArrayList());
+        long currentTime = System.currentTimeMillis();
+        usageTimestamps.removeIf(timestamp -> currentTime - timestamp > 24 * 60 * 60 * 1000L);
+        if (usageTimestamps.size() >= 3) {
+            event.reply(COINFLIP_COOLDOWN_MESSAGE).setEphemeral(true).queue();
+            return;
+        }
+        usageTimestamps.add(currentTime);
+        COOLDOWN_MAP.put(member.getIdLong(), usageTimestamps);
 
         // Perform the coinflip
         String guess = option.getAsString();

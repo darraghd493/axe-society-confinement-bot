@@ -19,5 +19,6 @@ public class BotMessages {
     public static final String CONFINED_USER_CANNOT_CONFINE_MESSAGE = "You cannot confine this user.";
     public static final String CONFINED_BOT_CANNOT_CONFINE_MESSAGE = "The bot cannot confine this user."; // imaginary restrictions - LOL!
     public static final String RELEASE_NOT_CONFINED_MESSAGE = "This user is not confined!";
+    public static final String COINFLIP_COOLDOWN_MESSAGE = "You have already used this command 3 times in the last 24 hours. Please try again later.";
     //endregion
 }
