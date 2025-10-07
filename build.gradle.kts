@@ -55,7 +55,3 @@ tasks.named<ShadowJar>("shadowJar") {
 tasks.build {
     dependsOn(tasks.shadowJar)
 }
-tasks.test {
-
-    useJUnitPlatform()
-}
