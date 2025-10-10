@@ -4,11 +4,14 @@ import lombok.extern.slf4j.Slf4j;
 import me.darragh.axesociety.confinementbot.BotConfig;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.channel.Channel;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
+import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
+import net.dv8tion.jda.internal.requests.restaction.MessageCreateActionImpl;
 
 /**
  * Listens for join events and handles them.
@@ -46,13 +49,21 @@ public class JoinListener extends Listener {
             return;
         }
 
+        User user = event.getUser();
+        Member member = event.getMember();
+
         MessageEmbed embed = new EmbedBuilder()
-                .setTitle(WELCOME_TITLE.formatted(event.getMember().getAsMention()))
+                .setTitle(WELCOME_TITLE.formatted(user.getEffectiveName()))
                 .setDescription(WELCOME_DESCRIPTION)
                 .setImage(WELCOME_GIF)
-                .setTimestamp(event.getMember().getTimeJoined())
+                .setAuthor(user.getAsTag(), null, user.getEffectiveAvatarUrl())
+                .setTimestamp(member.getTimeJoined())
                 .setColor(0x3498db)
                 .build();
-        channel.sendMessageEmbeds(embed).queue();
+
+        MessageCreateAction action = new MessageCreateActionImpl(channel);
+        action.setContent(user.getAsMention());
+        action.setEmbeds(embed);
+        action.queue();
     }
 }
