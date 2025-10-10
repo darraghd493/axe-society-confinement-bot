@@ -1,5 +1,6 @@
 package me.darragh.axesociety.confinementbot.command;
 
+import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 import java.util.concurrent.ExecutorService;
@@ -11,6 +12,7 @@ import java.util.concurrent.Executors;
  * @author darraghd493
  * @since 1.0.0
  */
+@Slf4j
 public class CommandRouter {
     private static final ExecutorService COMMAND_EXECUTOR = Executors.newFixedThreadPool(
             Math.min(2, Runtime.getRuntime().availableProcessors() * 2 - 1)
@@ -31,7 +33,7 @@ public class CommandRouter {
                     event.reply("An error occurred while executing the command.")
                             .setEphemeral(true)
                             .queue();
-                    e.printStackTrace();
+                    log.error("Error executing command '{}': {}", command.getName(), e.getMessage(), e);
                 }
             });
         }
